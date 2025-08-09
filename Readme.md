@@ -74,11 +74,17 @@ The architecture is divided into **three major sections**:
  
 .
 ├── Agent/ # MCP Agent implementations
+
 ├── MCP Tools/ # MCP Tool definitions (ML, Risk, SMS, Ticket)
+
 ├── API/ # ML models for fraud detection
+
 ├── ui/ # Frontend components
+
 ├── infra/ # Infrastructure as code (IaC) templates
+
 ├── tests/ # Unit and integration tests
+
 └── README.md # Project documentation 
 
 

@@ -89,6 +89,6 @@ The architecture is divided into **three major sections**:
 
 
 ## Proposed Architecture
-
+![Architecture](Architecture.png)
 
 

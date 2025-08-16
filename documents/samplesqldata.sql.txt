@@ -1,0 +1,372 @@
+-- =====================================================================
+-- FinGuard AI – Sample Data Loader (>=10 rows per table, with FKs OK)
+-- Safe re-runs: cleans only prior demo rows (SAMP% / demo-loader markers)
+-- Run as: your app schema (e.g., CAPSTONE_BANK)
+-- =====================================================================
+
+PROMPT Cleaning old SAMP% demo data...
+
+-- Child → parent order to satisfy FKs on delete
+DELETE FROM fg_case_audit       WHERE actor='demo-loader';
+DELETE FROM fg_feedback         WHERE notes LIKE 'SAMP%';
+DELETE FROM fg_otp_challenges   WHERE otp_ref LIKE 'SAMP%';
+DELETE FROM fg_notifications    WHERE message_template LIKE 'SAMP%';
+DELETE FROM fg_incidents        WHERE assignee LIKE 'demo%';
+DELETE FROM fg_alerts           WHERE reason_summary LIKE 'SAMP%';
+DELETE FROM fg_rule_hits        WHERE details_json LIKE '%SAMP%';
+DELETE FROM fg_model_scores     WHERE explain_json LIKE '%SAMP%';
+DELETE FROM fg_txn_features     WHERE feature_json LIKE '%SAMP%';
+DELETE FROM fg_transactions     WHERE event_id LIKE 'SAMP%';
+DELETE FROM fg_velocity_counters WHERE key_value LIKE 'SAMP%';
+DELETE FROM fg_rules            WHERE rule_code LIKE 'SAMP%';
+DELETE FROM fg_model_versions   WHERE notes LIKE 'SAMP%' OR model_name LIKE 'samp_%';
+DELETE FROM fg_blacklist        WHERE value LIKE 'SAMP%';
+DELETE FROM fg_devices          WHERE device_fingerprint LIKE 'samp-%';
+DELETE FROM fg_merchants        WHERE name LIKE 'SAMP%';
+DELETE FROM fg_accounts         WHERE core_acct_no LIKE 'SAMP%';
+DELETE FROM fg_customers        WHERE external_ref LIKE 'SAMP%';
+DELETE FROM fg_user_roles       WHERE user_id IN (SELECT user_id FROM fg_users WHERE username LIKE 'samp_%');
+DELETE FROM fg_users            WHERE username LIKE 'samp_%';
+DELETE FROM fg_roles            WHERE role_name LIKE 'SAMP%';
+DELETE FROM fg_stream_offsets   WHERE consumer_group LIKE 'SAMP%';
+DELETE FROM fg_api_keys         WHERE service_name LIKE 'SAMP%';
+COMMIT;
+
+PROMPT Inserting master/reference data...
+
+-- 1) Customers (10)
+BEGIN
+  FOR i IN 1..10 LOOP
+    INSERT INTO fg_customers(external_ref, full_name, email, phone_e164, kyc_level, risk_segment)
+    VALUES ( 'SAMP-CIF-'||TO_CHAR(i,'FM00'),
+             'Sample Customer '||i,
+             'sample'||i||'@example.com',
+             '+9199'||TO_CHAR(100000+i),
+             CASE WHEN i<=7 THEN 'KYC_FULL' ELSE 'KYC_MIN' END,
+             CASE WHEN i IN (3,6,9) THEN 'HIGH' WHEN i IN (2,5,8) THEN 'MEDIUM' ELSE 'NORMAL' END );
+  END LOOP;
+  COMMIT;
+END;
+/
+
+-- 2) Accounts (10) – one per first 10 customers
+BEGIN
+  FOR i IN 1..10 LOOP
+    INSERT INTO fg_accounts(customer_id, core_acct_no, acct_type, currency, status, opened_at)
+    SELECT c.customer_id,
+           'SAMP-ACC-'||TO_CHAR(i,'FM0000'),
+           CASE WHEN MOD(i,3)=0 THEN 'CURRENT' WHEN MOD(i,2)=0 THEN 'CREDIT_CARD' ELSE 'SAVINGS' END,
+           'INR', 'ACTIVE', SYSTIMESTAMP - NUMTODSINTERVAL(60+i,'DAY')
+    FROM fg_customers c
+    WHERE c.external_ref='SAMP-CIF-'||TO_CHAR(i,'FM00');
+  END LOOP;
+  COMMIT;
+END;
+/
+
+-- 3) Merchants (10)
+BEGIN
+  FOR i IN 1..10 LOOP
+    INSERT INTO fg_merchants(name, mcc_code, category, country, city)
+    VALUES ('SAMP-MERCH-'||i, TO_CHAR(5000+i),
+            CASE MOD(i,3) WHEN 0 THEN 'TRAVEL' WHEN 1 THEN 'E-COMMERCE' ELSE 'FOOD' END,
+            'IN',
+            CASE MOD(i,4) WHEN 0 THEN 'Hyderabad' WHEN 1 THEN 'Chennai' WHEN 2 THEN 'Bengaluru' ELSE 'Mumbai' END);
+  END LOOP;
+  COMMIT;
+END;
+/
+
+-- 4) Devices (10) – one per customer
+BEGIN
+  FOR i IN 1..10 LOOP
+    INSERT INTO fg_devices(customer_id, device_fingerprint, os, app_version, last_seen_at)
+    SELECT c.customer_id, 'samp-dev-'||i,
+           CASE WHEN MOD(i,2)=0 THEN 'iOS' ELSE 'Android' END,
+           '5.'||MOD(i,5)||'.'||MOD(i,7),
+           SYSTIMESTAMP - NUMTODSINTERVAL(i,'HOUR')
+    FROM fg_customers c WHERE c.external_ref='SAMP-CIF-'||TO_CHAR(i,'FM00');
+  END LOOP;
+  COMMIT;
+END;
+/
+
+-- 5) Blacklist (10)
+BEGIN
+  INSERT INTO fg_blacklist(type,value,reason) VALUES('IP','203.0.113.1','SAMP suspicious IP');
+  INSERT INTO fg_blacklist(type,value,reason) VALUES('IP','203.0.113.2','SAMP suspicious IP');
+  INSERT INTO fg_blacklist(type,value,reason) VALUES('DEVICE','samp-dev-9','SAMP device flagged');
+  INSERT INTO fg_blacklist(type,value,reason) VALUES('DEVICE','samp-dev-10','SAMP device flagged');
+  INSERT INTO fg_blacklist(type,value,reason) VALUES('CARD','SAMP-ACC-0009','SAMP card compromised');
+  INSERT INTO fg_blacklist(type,value,reason) VALUES('CARD','SAMP-ACC-0010','SAMP card compromised');
+  INSERT INTO fg_blacklist(type,value,reason) VALUES('MERCHANT','SAMP-MERCH-7','SAMP chargeback heavy');
+  INSERT INTO fg_blacklist(type,value,reason) VALUES('MERCHANT','SAMP-MERCH-8','SAMP chargeback heavy');
+  INSERT INTO fg_blacklist(type,value,reason) VALUES('PHONE','+9199100005','SAMP reported fraud');
+  INSERT INTO fg_blacklist(type,value,reason) VALUES('PHONE','+9199100006','SAMP reported fraud');
+  COMMIT;
+END;
+/
+
+-- 6) Rules (10)
+BEGIN
+  INSERT INTO fg_rules(rule_code, name, severity, is_active, definition_json)
+  VALUES('SAMP_VELOCITY_1H_5TXN','>5 txns in 1h','HIGH','Y','{"scope":"ACCOUNT","window_minutes":60,"txn_count_gt":5}');
+  INSERT INTO fg_rules(rule_code, name, severity, is_active, definition_json)
+  VALUES('SAMP_VELOCITY_24H_20TXN','>20 txns in 24h','HIGH','Y','{"scope":"ACCOUNT","window_minutes":1440,"txn_count_gt":20}');
+  INSERT INTO fg_rules(rule_code, name, severity, is_active, definition_json)
+  VALUES('SAMP_NIGHT_HIGH_AMT','High amt at night','MEDIUM','Y','{"hour_from":0,"hour_to":5,"amount_gte":20000}');
+  INSERT INTO fg_rules(rule_code, name, severity, is_active, definition_json)
+  VALUES('SAMP_DEVICE_BLACKLIST','Device on blacklist','CRITICAL','Y','{"device_blacklisted":true}');
+  INSERT INTO fg_rules(rule_code, name, severity, is_active, definition_json)
+  VALUES('SAMP_IP_BLACKLIST','IP on blacklist','CRITICAL','Y','{"ip_blacklisted":true}');
+  INSERT INTO fg_rules(rule_code, name, severity, is_active, definition_json)
+  VALUES('SAMP_GEO_MISMATCH','Geo mismatch','MEDIUM','Y','{"geo_mismatch":true}');
+  INSERT INTO fg_rules(rule_code, name, severity, is_active, definition_json)
+  VALUES('SAMP_MERCHANT_RISK','High-risk merchant','HIGH','Y','{"merchant_risky":true}');
+  INSERT INTO fg_rules(rule_code, name, severity, is_active, definition_json)
+  VALUES('SAMP_NEW_DEVICE_HIGH','New device high amt','HIGH','Y','{"new_device":true,"amount_gte":15000}');
+  INSERT INTO fg_rules(rule_code, name, severity, is_active, definition_json)
+  VALUES('SAMP_CARD_NOT_PRESENT','CNP high amt','MEDIUM','Y','{"channel":"CARD","present":false,"amount_gte":12000}');
+  INSERT INTO fg_rules(rule_code, name, severity, is_active, definition_json)
+  VALUES('SAMP_MULTIPLE_IPS','Multiple IPs short window','MEDIUM','Y','{"distinct_ips_gt":3,"window_minutes":30}');
+  COMMIT;
+END;
+/
+
+-- 7) Model versions (10)
+BEGIN
+  FOR i IN 1..10 LOOP
+    INSERT INTO fg_model_versions(model_name, version, deployed_at, status, notes)
+    VALUES('samp_txn','v1.'||TO_CHAR(i,'FM0')||'.0',
+           SYSTIMESTAMP - NUMTODSINTERVAL(11-i,'DAY'),
+           'ACTIVE','SAMP model gen '||i);
+  END LOOP;
+  COMMIT;
+END;
+/
+
+-- 8) Users / Roles (RBAC) (10 each)
+BEGIN
+  FOR i IN 1..10 LOOP
+    INSERT INTO fg_roles(role_name) VALUES('SAMP_ROLE_'||i);
+    INSERT INTO fg_users(username, full_name, email, password_hash, status)
+    VALUES('samp_user_'||i, 'SAMP User '||i, 'suser'||i||'@example.com', 'hash'||i, 'ACTIVE');
+    INSERT INTO fg_user_roles(user_id, role_id)
+    SELECT u.user_id, r.role_id
+    FROM fg_users u, fg_roles r
+    WHERE u.username='samp_user_'||i AND r.role_name='SAMP_ROLE_'||i;
+  END LOOP;
+  COMMIT;
+END;
+/
+
+-- 9) Stream offsets (10)
+BEGIN
+  FOR i IN 1..10 LOOP
+    INSERT INTO fg_stream_offsets(consumer_group, topic, partition_id, last_offset, updated_at)
+    VALUES('SAMP_GROUP','txn_topic', i-1, 1000+i*10, SYSTIMESTAMP);
+  END LOOP;
+  COMMIT;
+END;
+/
+
+-- 10) API keys (10)
+BEGIN
+  FOR i IN 1..10 LOOP
+    INSERT INTO fg_api_keys(service_name, api_key_hash, created_at, expires_at)
+    VALUES('SAMP-SVC-'||i,'hash-key-'||i, SYSTIMESTAMP-INTERVAL '1' DAY, SYSTIMESTAMP + INTERVAL '30' DAY);
+  END LOOP;
+  COMMIT;
+END;
+/
+
+PROMPT Inserting transactional data...
+
+-- 11) Transactions (30) over last 3 days (10/day)
+DECLARE
+  v_event_ts TIMESTAMP WITH TIME ZONE;
+  v_acc NUMBER;
+  v_mer NUMBER;
+  v_dev NUMBER;
+BEGIN
+  FOR i IN 1..30 LOOP
+    v_event_ts := SYSTIMESTAMP - NUMTODSINTERVAL( (CASE WHEN i<=10 THEN 1 WHEN i<=20 THEN 2 ELSE 3 END), 'DAY')
+                              + NUMTODSINTERVAL( MOD(i*37, 1440), 'MINUTE');
+    SELECT account_id INTO v_acc FROM (
+      SELECT a.account_id, ROW_NUMBER() OVER (ORDER BY a.account_id) rn FROM fg_accounts a
+    ) WHERE rn = MOD(i,10)+1;
+
+    SELECT merchant_id INTO v_mer FROM (
+      SELECT m.merchant_id, ROW_NUMBER() OVER (ORDER BY m.merchant_id) rn FROM fg_merchants m
+    ) WHERE rn = MOD(i,10)+1;
+
+    SELECT device_id INTO v_dev FROM (
+      SELECT d.device_id, ROW_NUMBER() OVER (ORDER BY d.device_id) rn FROM fg_devices d
+    ) WHERE rn = MOD(i,10)+1;
+
+    INSERT INTO fg_transactions(event_id, event_ts, account_id, counterparty_acct, merchant_id, amount, currency, channel, geolat, geolon, ip_addr, device_id, status)
+    VALUES ('SAMP-EVT-'||TO_CHAR(i,'FM0000'),
+            v_event_ts, v_acc,
+            'CP-'||TO_CHAR(10000+i),
+            v_mer,
+            1000 + MOD(i,7)*4500 + CASE WHEN MOD(i,9)=0 THEN 22000 ELSE 0 END,
+            'INR',
+            CASE WHEN MOD(i,5)=0 THEN 'CARD' WHEN MOD(i,5)=1 THEN 'UPI' WHEN MOD(i,5)=2 THEN 'NETBANKING' WHEN MOD(i,5)=3 THEN 'IMPS' ELSE 'NEFT' END,
+            12.9 + MOD(i,7)*0.1,
+            77.6 + MOD(i,6)*0.1,
+            CASE WHEN MOD(i,11)=0 THEN '203.0.113.1' ELSE '198.51.100.'||MOD(i,200) END,
+            v_dev,
+            'POSTED');
+  END LOOP;
+  COMMIT;
+END;
+/
+
+-- 12) Feature rows (1 per txn)
+INSERT INTO fg_txn_features(txn_id, feature_json)
+SELECT t.txn_id,
+       json_object(
+         'hour_of_day' VALUE EXTRACT(HOUR FROM CAST(t.event_ts AS TIMESTAMP)),
+         'is_new_device' VALUE CASE WHEN MOD(t.device_id,3)=0 THEN 1 ELSE 0 END,
+         'amt_to_avg_ratio' VALUE ROUND((t.amount / NULLIF((SELECT AVG(amount) FROM fg_transactions WHERE account_id=t.account_id),0)),2),
+         'SAMP' VALUE 1
+       )
+FROM fg_transactions t
+WHERE t.event_id LIKE 'SAMP-%';
+COMMIT;
+
+-- 13) Scores (use most-recent model version)
+INSERT INTO fg_model_scores(txn_id, model_id, risk_score, threshold_used, inference_ms, explain_json)
+SELECT t.txn_id,
+       (SELECT model_id FROM fg_model_versions WHERE model_name='samp_txn' ORDER BY deployed_at DESC FETCH FIRST 1 ROW ONLY),
+       CASE WHEN t.amount>=22000 THEN 88.0
+            WHEN t.ip_addr='203.0.113.1' THEN 92.0
+            WHEN EXTRACT(HOUR FROM CAST(t.event_ts AS TIMESTAMP)) BETWEEN 0 AND 5 THEN 70.0
+            ELSE 35.0 END,
+       75.0,
+       15 + MOD(t.txn_id,10),
+       json_object('top_factors' VALUE json_array('amount','ip','hour'), 'SAMP' VALUE 1)
+FROM fg_transactions t
+WHERE t.event_id LIKE 'SAMP-%';
+COMMIT;
+
+-- 14) Rule hits (at least 20)
+INSERT INTO fg_rule_hits(txn_id, rule_id, details_json)
+SELECT t.txn_id, r.rule_id, json_object('why' VALUE 'night high amount','SAMP' VALUE 1)
+FROM fg_transactions t
+JOIN fg_rules r ON r.rule_code='SAMP_NIGHT_HIGH_AMT'
+WHERE EXTRACT(HOUR FROM CAST(t.event_ts AS TIMESTAMP)) BETWEEN 0 AND 5
+  AND t.event_id LIKE 'SAMP-%';
+
+INSERT INTO fg_rule_hits(txn_id, rule_id, details_json)
+SELECT t.txn_id, r.rule_id, json_object('why' VALUE 'blacklisted IP','SAMP' VALUE 1)
+FROM fg_transactions t
+JOIN fg_rules r ON r.rule_code='SAMP_IP_BLACKLIST'
+WHERE t.ip_addr='203.0.113.1'
+  AND t.event_id LIKE 'SAMP-%';
+
+INSERT INTO fg_rule_hits(txn_id, rule_id, details_json)
+SELECT t.txn_id, r.rule_id, json_object('why' VALUE 'blacklisted device','SAMP' VALUE 1)
+FROM fg_transactions t
+JOIN fg_rules r ON r.rule_code='SAMP_DEVICE_BLACKLIST'
+JOIN fg_devices d ON d.device_id=t.device_id AND d.device_fingerprint IN ('samp-dev-9','samp-dev-10')
+WHERE t.event_id LIKE 'SAMP-%';
+COMMIT;
+
+-- 15) Velocity counters (10)
+BEGIN
+  FOR i IN 1..10 LOOP
+    INSERT INTO fg_velocity_counters(key_scope,key_value,window_minutes,txn_count,total_amount,updated_at)
+    VALUES ('ACCOUNT',
+            'SAMP-ACC-'||TO_CHAR(i,'FM0000'),
+            60,
+            5+MOD(i,6),
+            50000 + i*1000,
+            SYSTIMESTAMP);
+  END LOOP;
+  COMMIT;
+END;
+/
+
+-- 16) Alerts (10) – top risk txns
+INSERT INTO fg_alerts(txn_id, risk_score, decision, reason_summary)
+SELECT txn_id, risk_score,
+       CASE WHEN risk_score >= 90 THEN 'BLOCK' WHEN risk_score >= 75 THEN 'CHALLENGE' ELSE 'PENDING' END,
+       'SAMP auto alert'
+FROM (
+  SELECT t.txn_id,
+         (SELECT ms.risk_score FROM fg_model_scores ms WHERE ms.txn_id=t.txn_id FETCH FIRST 1 ROWS ONLY) AS risk_score
+  FROM fg_transactions t
+  WHERE t.event_id LIKE 'SAMP-%'
+  ORDER BY 2 DESC NULLS LAST
+) q
+WHERE ROWNUM <= 10;
+COMMIT;
+
+-- 17) Incidents (10) – one per alert
+INSERT INTO fg_incidents(alert_id, status, priority, assignee, sla_due_at)
+SELECT a.alert_id,
+       'OPEN',
+       CASE WHEN a.risk_score >= 90 THEN 'P1' ELSE 'P2' END,
+       'demo_analyst',
+       SYSTIMESTAMP + INTERVAL '4' HOUR
+FROM fg_alerts a
+WHERE a.reason_summary='SAMP auto alert';
+COMMIT;
+
+-- 18) Notifications (10)
+INSERT INTO fg_notifications(alert_id, customer_id, channel, destination, message_template, message_payload, status)
+SELECT a.alert_id,
+       acc.customer_id,
+       'SMS',
+       (SELECT phone_e164 FROM fg_customers c WHERE c.customer_id=acc.customer_id),
+       'SAMP-FRAUD-ALERT',
+       'SAMP: Suspicious transaction detected. Reply YES/NO.',
+       'SENT'
+FROM fg_alerts a
+JOIN fg_transactions t ON t.txn_id=a.txn_id
+JOIN fg_accounts acc ON acc.account_id=t.account_id
+WHERE a.reason_summary='SAMP auto alert';
+COMMIT;
+
+-- 19) OTP challenges (10)
+INSERT INTO fg_otp_challenges(alert_id, otp_ref, otp_hash, expires_at)
+SELECT a.alert_id, 'SAMP-OTP-'||a.alert_id, 'hash-otp-'||a.alert_id, SYSTIMESTAMP+INTERVAL '10' MINUTE
+FROM fg_alerts a
+WHERE a.reason_summary='SAMP auto alert';
+COMMIT;
+
+-- 20) Feedback (10)
+INSERT INTO fg_feedback(txn_id, customer_id, label, source, notes)
+SELECT t.txn_id, acc.customer_id,
+       CASE WHEN MOD(t.txn_id,4)=0 THEN 'FRAUD' ELSE 'LEGIT' END,
+       CASE WHEN MOD(t.txn_id,5)=0 THEN 'CUSTOMER' ELSE 'ANALYST' END,
+       'SAMP feedback'
+FROM fg_transactions t
+JOIN fg_accounts acc ON acc.account_id=t.account_id
+WHERE t.event_id LIKE 'SAMP-%'
+FETCH FIRST 10 ROWS ONLY;
+COMMIT;
+
+-- 21) Case audit (>=10 across entities)
+INSERT INTO fg_case_audit(entity_type, entity_id, action, actor, details_json)
+SELECT 'ALERT', a.alert_id, 'CREATE', 'demo-loader',
+       json_object('risk' VALUE a.risk_score, 'SAMP' VALUE 1)
+FROM fg_alerts a WHERE a.reason_summary='SAMP auto alert';
+
+INSERT INTO fg_case_audit(entity_type, entity_id, action, actor, details_json)
+SELECT 'INCIDENT', i.incident_id, 'CREATE', 'demo-loader',
+       json_object('priority' VALUE i.priority, 'SAMP' VALUE 1)
+FROM fg_incidents i
+JOIN fg_alerts a ON a.alert_id=i.alert_id
+WHERE a.reason_summary='SAMP auto alert';
+
+INSERT INTO fg_case_audit(entity_type, entity_id, action, actor, details_json)
+SELECT 'NOTIFICATION', n.alert_id, 'SEND', 'demo-loader',
+       json_object('channel' VALUE n.channel, 'dest' VALUE n.destination, 'SAMP' VALUE 1)
+FROM fg_notifications n
+JOIN fg_alerts a ON a.alert_id=n.alert_id
+WHERE a.reason_summary='SAMP auto alert';
+COMMIT;
+
+PROMPT All tables now have >= 10 SAMP demo rows. Load complete.

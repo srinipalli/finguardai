@@ -1,0 +1,622 @@
+{\rtf1\ansi\deff0
+\fs36\b FinGuard AI – Rule Catalog\par\b0
+\fs20 Generated: 2025-08-15 03:34\par
+\par
+\b Summary by Category:\b0\par
+ - BEHAVIORAL: 6 rules\par
+ - BENEFICIARY_NOVELTY: 6 rules\par
+ - BLACKLIST_REPUTATION: 6 rules\par
+ - CHANNEL: 36 rules\par
+ - CHARGEBACK: 6 rules\par
+ - GEO: 6 rules\par
+ - GEO_VELOCITY: 6 rules\par
+ - GRAPH_RING: 6 rules\par
+ - KYC_LIFECYCLE: 6 rules\par
+ - MCC_RISK: 6 rules\par
+ - OTP_PIN: 6 rules\par
+ - SCAM_SIGNAL: 6 rules\par
+ - TIME_OF_DAY: 6 rules\par
+ - VELOCITY: 6 rules\par
+ - WALLET_FOREX_CARD: 6 rules\par
+\par
+\pard\sb120\sa60\b FG_VELOCITY_01 – Velocity breach (ACCOUNT 3 in 15m)\par\b0
+\i Category: VELOCITY | Severity: HIGH\i0\par
+\ul Description:\ul0 Triggers when account exceeds 3 transactions within 15 minutes and total amount ≥ ₹10,000.\par
+\ul Example:\ul0 4 transfers on same account in 15 minutes totaling ₹15,000.\par
+\par
+\pard\sb120\sa60\b FG_VELOCITY_02 – Velocity breach (DEVICE 5 in 30m)\par\b0
+\i Category: VELOCITY | Severity: HIGH\i0\par
+\ul Description:\ul0 Triggers when device exceeds 5 transactions within 30 minutes and total amount ≥ ₹20,000.\par
+\ul Example:\ul0 6 transfers on same device in 30 minutes totaling ₹25,000.\par
+\par
+\pard\sb120\sa60\b FG_VELOCITY_03 – Velocity breach (IP 7 in 60m)\par\b0
+\i Category: VELOCITY | Severity: HIGH\i0\par
+\ul Description:\ul0 Triggers when ip exceeds 7 transactions within 60 minutes and total amount ≥ ₹30,000.\par
+\ul Example:\ul0 8 transfers on same ip in 60 minutes totaling ₹35,000.\par
+\par
+\pard\sb120\sa60\b FG_VELOCITY_04 – Velocity breach (MERCHANT 10 in 120m)\par\b0
+\i Category: VELOCITY | Severity: HIGH\i0\par
+\ul Description:\ul0 Triggers when merchant exceeds 10 transactions within 120 minutes and total amount ≥ ₹50,000.\par
+\ul Example:\ul0 11 transfers on same merchant in 120 minutes totaling ₹55,000.\par
+\par
+\pard\sb120\sa60\b FG_VELOCITY_05 – Velocity breach (CUSTOMER 20 in 1440m)\par\b0
+\i Category: VELOCITY | Severity: HIGH\i0\par
+\ul Description:\ul0 Triggers when customer exceeds 20 transactions within 1440 minutes and total amount ≥ ₹100,000.\par
+\ul Example:\ul0 21 transfers on same customer in 1440 minutes totaling ₹105,000.\par
+\par
+\pard\sb120\sa60\b FG_VELOCITY_06 – Velocity breach (CARD 40 in 4320m)\par\b0
+\i Category: VELOCITY | Severity: HIGH\i0\par
+\ul Description:\ul0 Triggers when card exceeds 40 transactions within 4320 minutes and total amount ≥ ₹150,000.\par
+\ul Example:\ul0 41 transfers on same card in 4320 minutes totaling ₹155,000.\par
+\par
+\pard\sb120\sa60\b FG_TIME_01 – Time-of-day anomaly 0-4h\par\b0
+\i Category: TIME_OF_DAY | Severity: MEDIUM\i0\par
+\ul Description:\ul0 Flags transactions between 0:00–4:00 on any with amount ≥ ₹20,000.\par
+\ul Example:\ul0 Txn at 00:30 on a any for ₹20,000.\par
+\par
+\pard\sb120\sa60\b FG_TIME_02 – Time-of-day anomaly 1-5h\par\b0
+\i Category: TIME_OF_DAY | Severity: MEDIUM\i0\par
+\ul Description:\ul0 Flags transactions between 1:00–5:00 on weekend with amount ≥ ₹25,000.\par
+\ul Example:\ul0 Txn at 01:30 on a weekend for ₹25,000.\par
+\par
+\pard\sb120\sa60\b FG_TIME_03 – Time-of-day anomaly 22-23h\par\b0
+\i Category: TIME_OF_DAY | Severity: MEDIUM\i0\par
+\ul Description:\ul0 Flags transactions between 22:00–23:00 on weekday with amount ≥ ₹30,000.\par
+\ul Example:\ul0 Txn at 22:30 on a weekday for ₹30,000.\par
+\par
+\pard\sb120\sa60\b FG_TIME_04 – Time-of-day anomaly 0-6h\par\b0
+\i Category: TIME_OF_DAY | Severity: MEDIUM\i0\par
+\ul Description:\ul0 Flags transactions between 0:00–6:00 on any with amount ≥ ₹15,000.\par
+\ul Example:\ul0 Txn at 00:30 on a any for ₹15,000.\par
+\par
+\pard\sb120\sa60\b FG_TIME_05 – Time-of-day anomaly 23-2h\par\b0
+\i Category: TIME_OF_DAY | Severity: MEDIUM\i0\par
+\ul Description:\ul0 Flags transactions between 23:00–2:00 on any with amount ≥ ₹18,000.\par
+\ul Example:\ul0 Txn at 23:30 on a any for ₹18,000.\par
+\par
+\pard\sb120\sa60\b FG_TIME_06 – Time-of-day anomaly 12-14h\par\b0
+\i Category: TIME_OF_DAY | Severity: MEDIUM\i0\par
+\ul Description:\ul0 Flags transactions between 12:00–14:00 on weekday with amount ≥ ₹500,000.\par
+\ul Example:\ul0 Txn at 12:30 on a weekday for ₹500,000.\par
+\par
+\pard\sb120\sa60\b FG_CARD_01 – CARD anomaly - CNP\par\b0
+\i Category: CHANNEL | Severity: MEDIUM\i0\par
+\ul Description:\ul0 Channel-specific pattern for CARD / CNP; amount ≥ ₹10,000 (card-not-present).\par
+\ul Example:\ul0 CARD CNP txn of ₹12,000.\par
+\par
+\pard\sb120\sa60\b FG_CARD_02 – CARD anomaly - CONTACTLESS\par\b0
+\i Category: CHANNEL | Severity: MEDIUM\i0\par
+\ul Description:\ul0 Channel-specific pattern for CARD / CONTACTLESS; amount ≥ ₹20,000 (card-present).\par
+\ul Example:\ul0 CARD CONTACTLESS txn of ₹20,000.\par
+\par
+\pard\sb120\sa60\b FG_CARD_03 – CARD anomaly - MOTO\par\b0
+\i Category: CHANNEL | Severity: MEDIUM\i0\par
+\ul Description:\ul0 Channel-specific pattern for CARD / MOTO; amount ≥ ₹30,000 (card-not-present).\par
+\ul Example:\ul0 CARD MOTO txn of ₹30,000.\par
+\par
+\pard\sb120\sa60\b FG_CARD_04 – CARD anomaly - INTERNATIONAL\par\b0
+\i Category: CHANNEL | Severity: MEDIUM\i0\par
+\ul Description:\ul0 Channel-specific pattern for CARD / INTERNATIONAL; amount ≥ ₹40,000 (card-present).\par
+\ul Example:\ul0 CARD INTERNATIONAL txn of ₹40,000.\par
+\par
+\pard\sb120\sa60\b FG_CARD_05 – CARD anomaly - ECOM\par\b0
+\i Category: CHANNEL | Severity: MEDIUM\i0\par
+\ul Description:\ul0 Channel-specific pattern for CARD / ECOM; amount ≥ ₹50,000 (card-not-present).\par
+\ul Example:\ul0 CARD ECOM txn of ₹50,000.\par
+\par
+\pard\sb120\sa60\b FG_CARD_06 – CARD anomaly - CARD_PRESENT\par\b0
+\i Category: CHANNEL | Severity: MEDIUM\i0\par
+\ul Description:\ul0 Channel-specific pattern for CARD / CARD_PRESENT; amount ≥ ₹60,000 (card-present).\par
+\ul Example:\ul0 CARD CARD_PRESENT txn of ₹60,000.\par
+\par
+\pard\sb120\sa60\b FG_UPI_01 – UPI anomaly - P2P\par\b0
+\i Category: CHANNEL | Severity: MEDIUM\i0\par
+\ul Description:\ul0 Channel-specific pattern for UPI / P2P; amount ≥ ₹10,000 (standard).\par
+\ul Example:\ul0 UPI P2P txn of ₹12,000.\par
+\par
+\pard\sb120\sa60\b FG_UPI_02 – UPI anomaly - P2M\par\b0
+\i Category: CHANNEL | Severity: MEDIUM\i0\par
+\ul Description:\ul0 Channel-specific pattern for UPI / P2M; amount ≥ ₹20,000 (standard).\par
+\ul Example:\ul0 UPI P2M txn of ₹20,000.\par
+\par
+\pard\sb120\sa60\b FG_UPI_03 – UPI anomaly - AUTOPAY\par\b0
+\i Category: CHANNEL | Severity: MEDIUM\i0\par
+\ul Description:\ul0 Channel-specific pattern for UPI / AUTOPAY; amount ≥ ₹30,000 (standard).\par
+\ul Example:\ul0 UPI AUTOPAY txn of ₹30,000.\par
+\par
+\pard\sb120\sa60\b FG_UPI_04 – UPI anomaly - MANDATE\par\b0
+\i Category: CHANNEL | Severity: MEDIUM\i0\par
+\ul Description:\ul0 Channel-specific pattern for UPI / MANDATE; amount ≥ ₹40,000 (standard).\par
+\ul Example:\ul0 UPI MANDATE txn of ₹40,000.\par
+\par
+\pard\sb120\sa60\b FG_UPI_05 – UPI anomaly - QR_STATIC\par\b0
+\i Category: CHANNEL | Severity: MEDIUM\i0\par
+\ul Description:\ul0 Channel-specific pattern for UPI / QR_STATIC; amount ≥ ₹50,000 (standard).\par
+\ul Example:\ul0 UPI QR_STATIC txn of ₹50,000.\par
+\par
+\pard\sb120\sa60\b FG_UPI_06 – UPI anomaly - QR_DYNAMIC\par\b0
+\i Category: CHANNEL | Severity: MEDIUM\i0\par
+\ul Description:\ul0 Channel-specific pattern for UPI / QR_DYNAMIC; amount ≥ ₹60,000 (standard).\par
+\ul Example:\ul0 UPI QR_DYNAMIC txn of ₹60,000.\par
+\par
+\pard\sb120\sa60\b FG_IMPS_01 – IMPS anomaly - P2A\par\b0
+\i Category: CHANNEL | Severity: MEDIUM\i0\par
+\ul Description:\ul0 Channel-specific pattern for IMPS / P2A; amount ≥ ₹10,000 (standard).\par
+\ul Example:\ul0 IMPS P2A txn of ₹12,000.\par
+\par
+\pard\sb120\sa60\b FG_IMPS_02 – IMPS anomaly - P2P\par\b0
+\i Category: CHANNEL | Severity: MEDIUM\i0\par
+\ul Description:\ul0 Channel-specific pattern for IMPS / P2P; amount ≥ ₹20,000 (standard).\par
+\ul Example:\ul0 IMPS P2P txn of ₹20,000.\par
+\par
+\pard\sb120\sa60\b FG_IMPS_03 – IMPS anomaly - MERCHANT\par\b0
+\i Category: CHANNEL | Severity: MEDIUM\i0\par
+\ul Description:\ul0 Channel-specific pattern for IMPS / MERCHANT; amount ≥ ₹30,000 (standard).\par
+\ul Example:\ul0 IMPS MERCHANT txn of ₹30,000.\par
+\par
+\pard\sb120\sa60\b FG_IMPS_04 – IMPS anomaly - NIGHT\par\b0
+\i Category: CHANNEL | Severity: MEDIUM\i0\par
+\ul Description:\ul0 Channel-specific pattern for IMPS / NIGHT; amount ≥ ₹40,000 (standard).\par
+\ul Example:\ul0 IMPS NIGHT txn of ₹40,000.\par
+\par
+\pard\sb120\sa60\b FG_IMPS_05 – IMPS anomaly - HIGH_VALUE\par\b0
+\i Category: CHANNEL | Severity: MEDIUM\i0\par
+\ul Description:\ul0 Channel-specific pattern for IMPS / HIGH_VALUE; amount ≥ ₹50,000 (standard).\par
+\ul Example:\ul0 IMPS HIGH_VALUE txn of ₹50,000.\par
+\par
+\pard\sb120\sa60\b FG_IMPS_06 – IMPS anomaly - NEW_BENEFICIARY\par\b0
+\i Category: CHANNEL | Severity: MEDIUM\i0\par
+\ul Description:\ul0 Channel-specific pattern for IMPS / NEW_BENEFICIARY; amount ≥ ₹60,000 (standard).\par
+\ul Example:\ul0 IMPS NEW_BENEFICIARY txn of ₹60,000.\par
+\par
+\pard\sb120\sa60\b FG_NEFT_01 – NEFT anomaly - BATCH\par\b0
+\i Category: CHANNEL | Severity: MEDIUM\i0\par
+\ul Description:\ul0 Channel-specific pattern for NEFT / BATCH; amount ≥ ₹10,000 (standard).\par
+\ul Example:\ul0 NEFT BATCH txn of ₹12,000.\par
+\par
+\pard\sb120\sa60\b FG_NEFT_02 – NEFT anomaly - ODD_HOURS\par\b0
+\i Category: CHANNEL | Severity: MEDIUM\i0\par
+\ul Description:\ul0 Channel-specific pattern for NEFT / ODD_HOURS; amount ≥ ₹20,000 (standard).\par
+\ul Example:\ul0 NEFT ODD_HOURS txn of ₹20,000.\par
+\par
+\pard\sb120\sa60\b FG_NEFT_03 – NEFT anomaly - NEW_PAYEE\par\b0
+\i Category: CHANNEL | Severity: MEDIUM\i0\par
+\ul Description:\ul0 Channel-specific pattern for NEFT / NEW_PAYEE; amount ≥ ₹30,000 (standard).\par
+\ul Example:\ul0 NEFT NEW_PAYEE txn of ₹30,000.\par
+\par
+\pard\sb120\sa60\b FG_NEFT_04 – NEFT anomaly - HIGH_VALUE\par\b0
+\i Category: CHANNEL | Severity: MEDIUM\i0\par
+\ul Description:\ul0 Channel-specific pattern for NEFT / HIGH_VALUE; amount ≥ ₹40,000 (standard).\par
+\ul Example:\ul0 NEFT HIGH_VALUE txn of ₹40,000.\par
+\par
+\pard\sb120\sa60\b FG_NEFT_05 – NEFT anomaly - CORP_BULK\par\b0
+\i Category: CHANNEL | Severity: MEDIUM\i0\par
+\ul Description:\ul0 Channel-specific pattern for NEFT / CORP_BULK; amount ≥ ₹50,000 (standard).\par
+\ul Example:\ul0 NEFT CORP_BULK txn of ₹50,000.\par
+\par
+\pard\sb120\sa60\b FG_NEFT_06 – NEFT anomaly - FIRST_TIME_IFSC\par\b0
+\i Category: CHANNEL | Severity: MEDIUM\i0\par
+\ul Description:\ul0 Channel-specific pattern for NEFT / FIRST_TIME_IFSC; amount ≥ ₹60,000 (standard).\par
+\ul Example:\ul0 NEFT FIRST_TIME_IFSC txn of ₹60,000.\par
+\par
+\pard\sb120\sa60\b FG_NETBANK_01 – NETBANKING anomaly - LOGIN_NEW_DEVICE\par\b0
+\i Category: CHANNEL | Severity: MEDIUM\i0\par
+\ul Description:\ul0 Channel-specific pattern for NETBANKING / LOGIN_NEW_DEVICE; amount ≥ ₹10,000 (standard).\par
+\ul Example:\ul0 NETBANKING LOGIN_NEW_DEVICE txn of ₹12,000.\par
+\par
+\pard\sb120\sa60\b FG_NETBANK_02 – NETBANKING anomaly - PAYEE_FIRST\par\b0
+\i Category: CHANNEL | Severity: MEDIUM\i0\par
+\ul Description:\ul0 Channel-specific pattern for NETBANKING / PAYEE_FIRST; amount ≥ ₹20,000 (standard).\par
+\ul Example:\ul0 NETBANKING PAYEE_FIRST txn of ₹20,000.\par
+\par
+\pard\sb120\sa60\b FG_NETBANK_03 – NETBANKING anomaly - BILLPAY\par\b0
+\i Category: CHANNEL | Severity: MEDIUM\i0\par
+\ul Description:\ul0 Channel-specific pattern for NETBANKING / BILLPAY; amount ≥ ₹30,000 (standard).\par
+\ul Example:\ul0 NETBANKING BILLPAY txn of ₹30,000.\par
+\par
+\pard\sb120\sa60\b FG_NETBANK_04 – NETBANKING anomaly - HIGH_VALUE\par\b0
+\i Category: CHANNEL | Severity: MEDIUM\i0\par
+\ul Description:\ul0 Channel-specific pattern for NETBANKING / HIGH_VALUE; amount ≥ ₹40,000 (standard).\par
+\ul Example:\ul0 NETBANKING HIGH_VALUE txn of ₹40,000.\par
+\par
+\pard\sb120\sa60\b FG_NETBANK_05 – NETBANKING anomaly - MULTI_IP\par\b0
+\i Category: CHANNEL | Severity: MEDIUM\i0\par
+\ul Description:\ul0 Channel-specific pattern for NETBANKING / MULTI_IP; amount ≥ ₹50,000 (standard).\par
+\ul Example:\ul0 NETBANKING MULTI_IP txn of ₹50,000.\par
+\par
+\pard\sb120\sa60\b FG_NETBANK_06 – NETBANKING anomaly - NEW_BROWSER\par\b0
+\i Category: CHANNEL | Severity: MEDIUM\i0\par
+\ul Description:\ul0 Channel-specific pattern for NETBANKING / NEW_BROWSER; amount ≥ ₹60,000 (standard).\par
+\ul Example:\ul0 NETBANKING NEW_BROWSER txn of ₹60,000.\par
+\par
+\pard\sb120\sa60\b FG_ATM_01 – ATM anomaly - WITHDRAWAL\par\b0
+\i Category: CHANNEL | Severity: MEDIUM\i0\par
+\ul Description:\ul0 Channel-specific pattern for ATM / WITHDRAWAL; amount ≥ ₹10,000 (standard).\par
+\ul Example:\ul0 ATM WITHDRAWAL txn of ₹12,000.\par
+\par
+\pard\sb120\sa60\b FG_ATM_02 – ATM anomaly - BALANCE_ENQ\par\b0
+\i Category: CHANNEL | Severity: MEDIUM\i0\par
+\ul Description:\ul0 Channel-specific pattern for ATM / BALANCE_ENQ; amount ≥ ₹20,000 (standard).\par
+\ul Example:\ul0 ATM BALANCE_ENQ txn of ₹20,000.\par
+\par
+\pard\sb120\sa60\b FG_ATM_03 – ATM anomaly - MULTI_WITHDRAW\par\b0
+\i Category: CHANNEL | Severity: MEDIUM\i0\par
+\ul Description:\ul0 Channel-specific pattern for ATM / MULTI_WITHDRAW; amount ≥ ₹30,000 (standard).\par
+\ul Example:\ul0 ATM MULTI_WITHDRAW txn of ₹30,000.\par
+\par
+\pard\sb120\sa60\b FG_ATM_04 – ATM anomaly - NIGHT\par\b0
+\i Category: CHANNEL | Severity: MEDIUM\i0\par
+\ul Description:\ul0 Channel-specific pattern for ATM / NIGHT; amount ≥ ₹40,000 (standard).\par
+\ul Example:\ul0 ATM NIGHT txn of ₹40,000.\par
+\par
+\pard\sb120\sa60\b FG_ATM_05 – ATM anomaly - REMOTE_CITY\par\b0
+\i Category: CHANNEL | Severity: MEDIUM\i0\par
+\ul Description:\ul0 Channel-specific pattern for ATM / REMOTE_CITY; amount ≥ ₹50,000 (standard).\par
+\ul Example:\ul0 ATM REMOTE_CITY txn of ₹50,000.\par
+\par
+\pard\sb120\sa60\b FG_ATM_06 – ATM anomaly - FAILED_PIN\par\b0
+\i Category: CHANNEL | Severity: MEDIUM\i0\par
+\ul Description:\ul0 Channel-specific pattern for ATM / FAILED_PIN; amount ≥ ₹60,000 (standard).\par
+\ul Example:\ul0 ATM FAILED_PIN txn of ₹60,000.\par
+\par
+\pard\sb120\sa60\b FG_GEO_01 – Geo anomaly 1\par\b0
+\i Category: GEO | Severity: HIGH\i0\par
+\ul Description:\ul0 Home vs IP country mismatch on high amount.\par
+\ul Example:\ul0 Home country IN, IP shows US; amount ₹25,000.\par
+\par
+\pard\sb120\sa60\b FG_GEO_02 – Geo anomaly 2\par\b0
+\i Category: GEO | Severity: HIGH\i0\par
+\ul Description:\ul0 Improbable location shift: distance > 500 km within 60 minutes.\par
+\ul Example:\ul0 Device used in Chennai and then Delhi within 60 minutes.\par
+\par
+\pard\sb120\sa60\b FG_GEO_03 – Geo anomaly 3\par\b0
+\i Category: GEO | Severity: HIGH\i0\par
+\ul Description:\ul0 Geographic anomaly.\par
+\ul Example:\ul0 Unusual city or geo context for this customer.\par
+\par
+\pard\sb120\sa60\b FG_GEO_04 – Geo anomaly 4\par\b0
+\i Category: GEO | Severity: HIGH\i0\par
+\ul Description:\ul0 IP flagged as proxy/VPN with low reputation.\par
+\ul Example:\ul0 Transaction from VPN exit node, reputation score 20.\par
+\par
+\pard\sb120\sa60\b FG_GEO_05 – Geo anomaly 5\par\b0
+\i Category: GEO | Severity: HIGH\i0\par
+\ul Description:\ul0 TOR exit node usage on transaction.\par
+\ul Example:\ul0 IP belongs to TOR; block or challenge.\par
+\par
+\pard\sb120\sa60\b FG_GEO_06 – Geo anomaly 6\par\b0
+\i Category: GEO | Severity: HIGH\i0\par
+\ul Description:\ul0 GPS mandatory for channel but missing.\par
+\ul Example:\ul0 UPI high-value txn without GPS signal.\par
+\par
+\pard\sb120\sa60\b FG_GEOVEL_01 – Geo-velocity hop 1\par\b0
+\i Category: GEO_VELOCITY | Severity: HIGH\i0\par
+\ul Description:\ul0 Travel speed anomaly: distance > 1000 km within 30 minutes (requires ≥2 geo points).\par
+\ul Example:\ul0 Device in Hyderabad then Pune within 30 minutes (> 1000 km).\par
+\par
+\pard\sb120\sa60\b FG_GEOVEL_02 – Geo-velocity hop 2\par\b0
+\i Category: GEO_VELOCITY | Severity: HIGH\i0\par
+\ul Description:\ul0 Travel speed anomaly: distance > 800 km within 20 minutes (requires ≥2 geo points).\par
+\ul Example:\ul0 Device in Hyderabad then Pune within 20 minutes (> 800 km).\par
+\par
+\pard\sb120\sa60\b FG_GEOVEL_03 – Geo-velocity hop 3\par\b0
+\i Category: GEO_VELOCITY | Severity: HIGH\i0\par
+\ul Description:\ul0 Travel speed anomaly: distance > 300 km within 10 minutes (requires ≥2 geo points).\par
+\ul Example:\ul0 Device in Hyderabad then Pune within 10 minutes (> 300 km).\par
+\par
+\pard\sb120\sa60\b FG_GEOVEL_04 – Geo-velocity hop 4\par\b0
+\i Category: GEO_VELOCITY | Severity: HIGH\i0\par
+\ul Description:\ul0 Travel speed anomaly: distance > 150 km within 5 minutes (requires ≥2 geo points).\par
+\ul Example:\ul0 Device in Hyderabad then Pune within 5 minutes (> 150 km).\par
+\par
+\pard\sb120\sa60\b FG_GEOVEL_05 – Geo-velocity hop 5\par\b0
+\i Category: GEO_VELOCITY | Severity: HIGH\i0\par
+\ul Description:\ul0 Travel speed anomaly: distance > None km within 60 minutes (requires ≥2 geo points).\par
+\ul Example:\ul0 Device in Hyderabad then Pune within 60 minutes (> None km).\par
+\par
+\pard\sb120\sa60\b FG_GEOVEL_06 – Geo-velocity hop 6\par\b0
+\i Category: GEO_VELOCITY | Severity: HIGH\i0\par
+\ul Description:\ul0 Travel speed anomaly: distance > None km within 15 minutes (requires ≥2 geo points).\par
+\ul Example:\ul0 Device in Hyderabad then Pune within 15 minutes (> None km).\par
+\par
+\pard\sb120\sa60\b FG_MCC_01 – High-risk MCC cluster 1\par\b0
+\i Category: MCC_RISK | Severity: HIGH\i0\par
+\ul Description:\ul0 Risky MCCs [4829, 6011, 6012] with merchant risk ≥ 70 or chargeback rate ≥ 4.00%.\par
+\ul Example:\ul0 Txn at MCC 4829 for ₹12,000; merchant risk 80.\par
+\par
+\pard\sb120\sa60\b FG_MCC_02 – High-risk MCC cluster 2\par\b0
+\i Category: MCC_RISK | Severity: HIGH\i0\par
+\ul Description:\ul0 Risky MCCs [7995, 7801, 7832] with merchant risk ≥ 70 or chargeback rate ≥ 4.00%.\par
+\ul Example:\ul0 Txn at MCC 7995 for ₹12,000; merchant risk 80.\par
+\par
+\pard\sb120\sa60\b FG_MCC_03 – High-risk MCC cluster 3\par\b0
+\i Category: MCC_RISK | Severity: HIGH\i0\par
+\ul Description:\ul0 Risky MCCs [5122, 5912, 5977] with merchant risk ≥ 70 or chargeback rate ≥ 4.00%.\par
+\ul Example:\ul0 Txn at MCC 5122 for ₹12,000; merchant risk 80.\par
+\par
+\pard\sb120\sa60\b FG_MCC_04 – High-risk MCC cluster 4\par\b0
+\i Category: MCC_RISK | Severity: HIGH\i0\par
+\ul Description:\ul0 Risky MCCs [4111, 4131, 4789] with merchant risk ≥ 70 or chargeback rate ≥ 4.00%.\par
+\ul Example:\ul0 Txn at MCC 4111 for ₹12,000; merchant risk 80.\par
+\par
+\pard\sb120\sa60\b FG_MCC_05 – High-risk MCC cluster 5\par\b0
+\i Category: MCC_RISK | Severity: HIGH\i0\par
+\ul Description:\ul0 Risky MCCs [4814, 4899, 4900] with merchant risk ≥ 70 or chargeback rate ≥ 4.00%.\par
+\ul Example:\ul0 Txn at MCC 4814 for ₹12,000; merchant risk 80.\par
+\par
+\pard\sb120\sa60\b FG_MCC_06 – High-risk MCC cluster 6\par\b0
+\i Category: MCC_RISK | Severity: HIGH\i0\par
+\ul Description:\ul0 Risky MCCs [5399, 5999, 5994] with merchant risk ≥ 70 or chargeback rate ≥ 4.00%.\par
+\ul Example:\ul0 Txn at MCC 5399 for ₹12,000; merchant risk 80.\par
+\par
+\pard\sb120\sa60\b FG_REPUTE_01 – Blacklist/Reputation hit 1\par\b0
+\i Category: BLACKLIST_REPUTATION | Severity: CRITICAL\i0\par
+\ul Description:\ul0 Blacklist/reputation hit: ip_blacklisted.\par
+\ul Example:\ul0 IP found in blacklist with prior fraud reports.\par
+\par
+\pard\sb120\sa60\b FG_REPUTE_02 – Blacklist/Reputation hit 2\par\b0
+\i Category: BLACKLIST_REPUTATION | Severity: CRITICAL\i0\par
+\ul Description:\ul0 Blacklist/reputation hit: device_blacklisted.\par
+\ul Example:\ul0 IP found in blacklist with prior fraud reports.\par
+\par
+\pard\sb120\sa60\b FG_REPUTE_03 – Blacklist/Reputation hit 3\par\b0
+\i Category: BLACKLIST_REPUTATION | Severity: CRITICAL\i0\par
+\ul Description:\ul0 Blacklist/reputation hit: merchant_blacklisted.\par
+\ul Example:\ul0 IP found in blacklist with prior fraud reports.\par
+\par
+\pard\sb120\sa60\b FG_REPUTE_04 – Blacklist/Reputation hit 4\par\b0
+\i Category: BLACKLIST_REPUTATION | Severity: CRITICAL\i0\par
+\ul Description:\ul0 Blacklist/reputation hit: phone_blacklisted.\par
+\ul Example:\ul0 IP found in blacklist with prior fraud reports.\par
+\par
+\pard\sb120\sa60\b FG_REPUTE_05 – Blacklist/Reputation hit 5\par\b0
+\i Category: BLACKLIST_REPUTATION | Severity: CRITICAL\i0\par
+\ul Description:\ul0 Blacklist/reputation hit: card_blacklisted.\par
+\ul Example:\ul0 IP found in blacklist with prior fraud reports.\par
+\par
+\pard\sb120\sa60\b FG_REPUTE_06 – Blacklist/Reputation hit 6\par\b0
+\i Category: BLACKLIST_REPUTATION | Severity: CRITICAL\i0\par
+\ul Description:\ul0 Blacklist/reputation hit: reputation ≤ 25.\par
+\ul Example:\ul0 IP found in blacklist with prior fraud reports.\par
+\par
+\pard\sb120\sa60\b FG_KYC_01 – KYC/Lifecycle anomaly 1\par\b0
+\i Category: KYC_LIFECYCLE | Severity: MEDIUM\i0\par
+\ul Description:\ul0 Lifecycle anomaly: KYC=KYC_MIN; account age < days 7.\par
+\ul Example:\ul0 Account opened 2 days ago making ₹20,000 transfer.\par
+\par
+\pard\sb120\sa60\b FG_KYC_02 – KYC/Lifecycle anomaly 2\par\b0
+\i Category: KYC_LIFECYCLE | Severity: MEDIUM\i0\par
+\ul Description:\ul0 Lifecycle anomaly: KYC=KYC_VIDEO; account age < days 3.\par
+\ul Example:\ul0 Account opened 2 days ago making ₹20,000 transfer.\par
+\par
+\pard\sb120\sa60\b FG_KYC_03 – KYC/Lifecycle anomaly 3\par\b0
+\i Category: KYC_LIFECYCLE | Severity: MEDIUM\i0\par
+\ul Description:\ul0 Lifecycle anomaly: address change < days 7; amount ≥ ₹20,000.\par
+\ul Example:\ul0 Account opened 2 days ago making ₹20,000 transfer.\par
+\par
+\pard\sb120\sa60\b FG_KYC_04 – KYC/Lifecycle anomaly 4\par\b0
+\i Category: KYC_LIFECYCLE | Severity: MEDIUM\i0\par
+\ul Description:\ul0 Lifecycle anomaly: phone change < days 3; amount ≥ ₹10,000.\par
+\ul Example:\ul0 Account opened 2 days ago making ₹20,000 transfer.\par
+\par
+\pard\sb120\sa60\b FG_KYC_05 – KYC/Lifecycle anomaly 5\par\b0
+\i Category: KYC_LIFECYCLE | Severity: MEDIUM\i0\par
+\ul Description:\ul0 Lifecycle anomaly: email change < days 3; amount ≥ ₹10,000.\par
+\ul Example:\ul0 Account opened 2 days ago making ₹20,000 transfer.\par
+\par
+\pard\sb120\sa60\b FG_KYC_06 – KYC/Lifecycle anomaly 6\par\b0
+\i Category: KYC_LIFECYCLE | Severity: MEDIUM\i0\par
+\ul Description:\ul0 Lifecycle anomaly: KYC expiring in ≤ days 5; amount ≥ ₹15,000.\par
+\ul Example:\ul0 Account opened 2 days ago making ₹20,000 transfer.\par
+\par
+\pard\sb120\sa60\b FG_BENEF_01 – Beneficiary novelty 1\par\b0
+\i Category: BENEFICIARY_NOVELTY | Severity: MEDIUM\i0\par
+\ul Description:\ul0 New/unfamiliar beneficiary or rapid payments to a new payee.\par
+\ul Example:\ul0 First payment to new payee within 30 minutes for ₹15,000.\par
+\par
+\pard\sb120\sa60\b FG_BENEF_02 – Beneficiary novelty 2\par\b0
+\i Category: BENEFICIARY_NOVELTY | Severity: MEDIUM\i0\par
+\ul Description:\ul0 New/unfamiliar beneficiary or rapid payments to a new payee.\par
+\ul Example:\ul0 First payment to new payee within 30 minutes for ₹15,000.\par
+\par
+\pard\sb120\sa60\b FG_BENEF_03 – Beneficiary novelty 3\par\b0
+\i Category: BENEFICIARY_NOVELTY | Severity: MEDIUM\i0\par
+\ul Description:\ul0 New/unfamiliar beneficiary or rapid payments to a new payee.\par
+\ul Example:\ul0 First payment to new payee within 30 minutes for ₹15,000.\par
+\par
+\pard\sb120\sa60\b FG_BENEF_04 – Beneficiary novelty 4\par\b0
+\i Category: BENEFICIARY_NOVELTY | Severity: MEDIUM\i0\par
+\ul Description:\ul0 New/unfamiliar beneficiary or rapid payments to a new payee.\par
+\ul Example:\ul0 First payment to new payee within 30 minutes for ₹15,000.\par
+\par
+\pard\sb120\sa60\b FG_BENEF_05 – Beneficiary novelty 5\par\b0
+\i Category: BENEFICIARY_NOVELTY | Severity: MEDIUM\i0\par
+\ul Description:\ul0 New/unfamiliar beneficiary or rapid payments to a new payee.\par
+\ul Example:\ul0 First payment to new payee within 30 minutes for ₹15,000.\par
+\par
+\pard\sb120\sa60\b FG_BENEF_06 – Beneficiary novelty 6\par\b0
+\i Category: BENEFICIARY_NOVELTY | Severity: MEDIUM\i0\par
+\ul Description:\ul0 New/unfamiliar beneficiary or rapid payments to a new payee.\par
+\ul Example:\ul0 First payment to new payee within 30 minutes for ₹15,000.\par
+\par
+\pard\sb120\sa60\b FG_BEHAV_01 – Behavioral deviation 1\par\b0
+\i Category: BEHAVIORAL | Severity: HIGH\i0\par
+\ul Description:\ul0 Behavior deviates from baseline: amount_zscore_gt=3.0.\par
+\ul Example:\ul0 Unusually large amount at odd hour from a new device.\par
+\par
+\pard\sb120\sa60\b FG_BEHAV_02 – Behavioral deviation 2\par\b0
+\i Category: BEHAVIORAL | Severity: HIGH\i0\par
+\ul Description:\ul0 Behavior deviates from baseline: hour_zscore_gt=2.5.\par
+\ul Example:\ul0 Unusually large amount at odd hour from a new device.\par
+\par
+\pard\sb120\sa60\b FG_BEHAV_03 – Behavioral deviation 3\par\b0
+\i Category: BEHAVIORAL | Severity: HIGH\i0\par
+\ul Description:\ul0 Behavior deviates from baseline: channel_mix_change_zscore_gt=2.0.\par
+\ul Example:\ul0 Unusually large amount at odd hour from a new device.\par
+\par
+\pard\sb120\sa60\b FG_BEHAV_04 – Behavioral deviation 4\par\b0
+\i Category: BEHAVIORAL | Severity: HIGH\i0\par
+\ul Description:\ul0 Behavior deviates from baseline: new device.\par
+\ul Example:\ul0 Unusually large amount at odd hour from a new device.\par
+\par
+\pard\sb120\sa60\b FG_BEHAV_05 – Behavioral deviation 5\par\b0
+\i Category: BEHAVIORAL | Severity: HIGH\i0\par
+\ul Description:\ul0 Behavior deviates from baseline: new IP subnet.\par
+\ul Example:\ul0 Unusually large amount at odd hour from a new device.\par
+\par
+\pard\sb120\sa60\b FG_BEHAV_06 – Behavioral deviation 6\par\b0
+\i Category: BEHAVIORAL | Severity: HIGH\i0\par
+\ul Description:\ul0 Behavior deviates from baseline: failed login then transfer.\par
+\ul Example:\ul0 Unusually large amount at odd hour from a new device.\par
+\par
+\pard\sb120\sa60\b FG_CHBACK_01 – Chargeback/dispute signal 1\par\b0
+\i Category: CHARGEBACK | Severity: HIGH\i0\par
+\ul Description:\ul0 Prior disputes/chargebacks by customer or high merchant dispute rate.\par
+\ul Example:\ul0 Customer had 2 chargebacks in last 90 days; new txn flagged.\par
+\par
+\pard\sb120\sa60\b FG_CHBACK_02 – Chargeback/dispute signal 2\par\b0
+\i Category: CHARGEBACK | Severity: HIGH\i0\par
+\ul Description:\ul0 Prior disputes/chargebacks by customer or high merchant dispute rate.\par
+\ul Example:\ul0 Customer had 2 chargebacks in last 90 days; new txn flagged.\par
+\par
+\pard\sb120\sa60\b FG_CHBACK_03 – Chargeback/dispute signal 3\par\b0
+\i Category: CHARGEBACK | Severity: HIGH\i0\par
+\ul Description:\ul0 Prior disputes/chargebacks by customer or high merchant dispute rate.\par
+\ul Example:\ul0 Customer had 2 chargebacks in last 90 days; new txn flagged.\par
+\par
+\pard\sb120\sa60\b FG_CHBACK_04 – Chargeback/dispute signal 4\par\b0
+\i Category: CHARGEBACK | Severity: HIGH\i0\par
+\ul Description:\ul0 Prior disputes/chargebacks by customer or high merchant dispute rate.\par
+\ul Example:\ul0 Customer had 2 chargebacks in last 90 days; new txn flagged.\par
+\par
+\pard\sb120\sa60\b FG_CHBACK_05 – Chargeback/dispute signal 5\par\b0
+\i Category: CHARGEBACK | Severity: HIGH\i0\par
+\ul Description:\ul0 Prior disputes/chargebacks by customer or high merchant dispute rate.\par
+\ul Example:\ul0 Customer had 2 chargebacks in last 90 days; new txn flagged.\par
+\par
+\pard\sb120\sa60\b FG_CHBACK_06 – Chargeback/dispute signal 6\par\b0
+\i Category: CHARGEBACK | Severity: HIGH\i0\par
+\ul Description:\ul0 Prior disputes/chargebacks by customer or high merchant dispute rate.\par
+\ul Example:\ul0 Customer had 2 chargebacks in last 90 days; new txn flagged.\par
+\par
+\pard\sb120\sa60\b FG_WALLETFX_01 – Wallet/Forex/Card specific 1\par\b0
+\i Category: WALLET_FOREX_CARD | Severity: HIGH\i0\par
+\ul Description:\ul0 Wallet top-ups/chains, cross-currency or international card behavior.\par
+\ul Example:\ul0 Wallet top-up ₹60,000 followed by multiple P2P hops.\par
+\par
+\pard\sb120\sa60\b FG_WALLETFX_02 – Wallet/Forex/Card specific 2\par\b0
+\i Category: WALLET_FOREX_CARD | Severity: HIGH\i0\par
+\ul Description:\ul0 Wallet top-ups/chains, cross-currency or international card behavior.\par
+\ul Example:\ul0 Wallet top-up ₹60,000 followed by multiple P2P hops.\par
+\par
+\pard\sb120\sa60\b FG_WALLETFX_03 – Wallet/Forex/Card specific 3\par\b0
+\i Category: WALLET_FOREX_CARD | Severity: HIGH\i0\par
+\ul Description:\ul0 Wallet top-ups/chains, cross-currency or international card behavior.\par
+\ul Example:\ul0 Wallet top-up ₹60,000 followed by multiple P2P hops.\par
+\par
+\pard\sb120\sa60\b FG_WALLETFX_04 – Wallet/Forex/Card specific 4\par\b0
+\i Category: WALLET_FOREX_CARD | Severity: HIGH\i0\par
+\ul Description:\ul0 Wallet top-ups/chains, cross-currency or international card behavior.\par
+\ul Example:\ul0 Wallet top-up ₹60,000 followed by multiple P2P hops.\par
+\par
+\pard\sb120\sa60\b FG_WALLETFX_05 – Wallet/Forex/Card specific 5\par\b0
+\i Category: WALLET_FOREX_CARD | Severity: HIGH\i0\par
+\ul Description:\ul0 Wallet top-ups/chains, cross-currency or international card behavior.\par
+\ul Example:\ul0 Wallet top-up ₹60,000 followed by multiple P2P hops.\par
+\par
+\pard\sb120\sa60\b FG_WALLETFX_06 – Wallet/Forex/Card specific 6\par\b0
+\i Category: WALLET_FOREX_CARD | Severity: HIGH\i0\par
+\ul Description:\ul0 Wallet top-ups/chains, cross-currency or international card behavior.\par
+\ul Example:\ul0 Wallet top-up ₹60,000 followed by multiple P2P hops.\par
+\par
+\pard\sb120\sa60\b FG_OTPPIN_01 – OTP/PIN anomaly 1\par\b0
+\i Category: OTP_PIN | Severity: CRITICAL\i0\par
+\ul Description:\ul0 Auth anomalies: repeated OTP/PIN failures, bypass, SIM swap, biometric disabled.\par
+\ul Example:\ul0 4 failed OTP attempts in 10 minutes for a ₹15,000 UPI.\par
+\par
+\pard\sb120\sa60\b FG_OTPPIN_02 – OTP/PIN anomaly 2\par\b0
+\i Category: OTP_PIN | Severity: CRITICAL\i0\par
+\ul Description:\ul0 Auth anomalies: repeated OTP/PIN failures, bypass, SIM swap, biometric disabled.\par
+\ul Example:\ul0 4 failed OTP attempts in 10 minutes for a ₹15,000 UPI.\par
+\par
+\pard\sb120\sa60\b FG_OTPPIN_03 – OTP/PIN anomaly 3\par\b0
+\i Category: OTP_PIN | Severity: CRITICAL\i0\par
+\ul Description:\ul0 Auth anomalies: repeated OTP/PIN failures, bypass, SIM swap, biometric disabled.\par
+\ul Example:\ul0 4 failed OTP attempts in 10 minutes for a ₹15,000 UPI.\par
+\par
+\pard\sb120\sa60\b FG_OTPPIN_04 – OTP/PIN anomaly 4\par\b0
+\i Category: OTP_PIN | Severity: CRITICAL\i0\par
+\ul Description:\ul0 Auth anomalies: repeated OTP/PIN failures, bypass, SIM swap, biometric disabled.\par
+\ul Example:\ul0 4 failed OTP attempts in 10 minutes for a ₹15,000 UPI.\par
+\par
+\pard\sb120\sa60\b FG_OTPPIN_05 – OTP/PIN anomaly 5\par\b0
+\i Category: OTP_PIN | Severity: CRITICAL\i0\par
+\ul Description:\ul0 Auth anomalies: repeated OTP/PIN failures, bypass, SIM swap, biometric disabled.\par
+\ul Example:\ul0 4 failed OTP attempts in 10 minutes for a ₹15,000 UPI.\par
+\par
+\pard\sb120\sa60\b FG_OTPPIN_06 – OTP/PIN anomaly 6\par\b0
+\i Category: OTP_PIN | Severity: CRITICAL\i0\par
+\ul Description:\ul0 Auth anomalies: repeated OTP/PIN failures, bypass, SIM swap, biometric disabled.\par
+\ul Example:\ul0 4 failed OTP attempts in 10 minutes for a ₹15,000 UPI.\par
+\par
+\pard\sb120\sa60\b FG_GRAPH_01 – Graph/ring suspicion 1\par\b0
+\i Category: GRAPH_RING | Severity: CRITICAL\i0\par
+\ul Description:\ul0 Network signals suggest collusion: shared devices/IPs, short-path to known fraud, large components.\par
+\ul Example:\ul0 Account shares device with 4 other flagged accounts.\par
+\par
+\pard\sb120\sa60\b FG_GRAPH_02 – Graph/ring suspicion 2\par\b0
+\i Category: GRAPH_RING | Severity: CRITICAL\i0\par
+\ul Description:\ul0 Network signals suggest collusion: shared devices/IPs, short-path to known fraud, large components.\par
+\ul Example:\ul0 Account shares device with 4 other flagged accounts.\par
+\par
+\pard\sb120\sa60\b FG_GRAPH_03 – Graph/ring suspicion 3\par\b0
+\i Category: GRAPH_RING | Severity: CRITICAL\i0\par
+\ul Description:\ul0 Network signals suggest collusion: shared devices/IPs, short-path to known fraud, large components.\par
+\ul Example:\ul0 Account shares device with 4 other flagged accounts.\par
+\par
+\pard\sb120\sa60\b FG_GRAPH_04 – Graph/ring suspicion 4\par\b0
+\i Category: GRAPH_RING | Severity: CRITICAL\i0\par
+\ul Description:\ul0 Network signals suggest collusion: shared devices/IPs, short-path to known fraud, large components.\par
+\ul Example:\ul0 Account shares device with 4 other flagged accounts.\par
+\par
+\pard\sb120\sa60\b FG_GRAPH_05 – Graph/ring suspicion 5\par\b0
+\i Category: GRAPH_RING | Severity: CRITICAL\i0\par
+\ul Description:\ul0 Network signals suggest collusion: shared devices/IPs, short-path to known fraud, large components.\par
+\ul Example:\ul0 Account shares device with 4 other flagged accounts.\par
+\par
+\pard\sb120\sa60\b FG_GRAPH_06 – Graph/ring suspicion 6\par\b0
+\i Category: GRAPH_RING | Severity: CRITICAL\i0\par
+\ul Description:\ul0 Network signals suggest collusion: shared devices/IPs, short-path to known fraud, large components.\par
+\ul Example:\ul0 Account shares device with 4 other flagged accounts.\par
+\par
+\pard\sb120\sa60\b FG_SCAM_01 – Scam signal 1\par\b0
+\i Category: SCAM_SIGNAL | Severity: CRITICAL\i0\par
+\ul Description:\ul0 Narration/metadata indicate social-engineering pattern (refund/KYC/utility/parcel/task/loan-fee).\par
+\ul Example:\ul0 Narration contains 'refund' and 'OTP' keywords.\par
+\par
+\pard\sb120\sa60\b FG_SCAM_02 – Scam signal 2\par\b0
+\i Category: SCAM_SIGNAL | Severity: CRITICAL\i0\par
+\ul Description:\ul0 Narration/metadata indicate social-engineering pattern (refund/KYC/utility/parcel/task/loan-fee).\par
+\ul Example:\ul0 Narration contains 'refund' and 'OTP' keywords.\par
+\par
+\pard\sb120\sa60\b FG_SCAM_03 – Scam signal 3\par\b0
+\i Category: SCAM_SIGNAL | Severity: CRITICAL\i0\par
+\ul Description:\ul0 Narration/metadata indicate social-engineering pattern (refund/KYC/utility/parcel/task/loan-fee).\par
+\ul Example:\ul0 Narration contains 'refund' and 'OTP' keywords.\par
+\par
+\pard\sb120\sa60\b FG_SCAM_04 – Scam signal 4\par\b0
+\i Category: SCAM_SIGNAL | Severity: CRITICAL\i0\par
+\ul Description:\ul0 Narration/metadata indicate social-engineering pattern (refund/KYC/utility/parcel/task/loan-fee).\par
+\ul Example:\ul0 Narration contains 'refund' and 'OTP' keywords.\par
+\par
+\pard\sb120\sa60\b FG_SCAM_05 – Scam signal 5\par\b0
+\i Category: SCAM_SIGNAL | Severity: CRITICAL\i0\par
+\ul Description:\ul0 Narration/metadata indicate social-engineering pattern (refund/KYC/utility/parcel/task/loan-fee).\par
+\ul Example:\ul0 Narration contains 'refund' and 'OTP' keywords.\par
+\par
+\pard\sb120\sa60\b FG_SCAM_06 – Scam signal 6\par\b0
+\i Category: SCAM_SIGNAL | Severity: CRITICAL\i0\par
+\ul Description:\ul0 Narration/metadata indicate social-engineering pattern (refund/KYC/utility/parcel/task/loan-fee).\par
+\ul Example:\ul0 Narration contains 'refund' and 'OTP' keywords.\par
+\par
+}

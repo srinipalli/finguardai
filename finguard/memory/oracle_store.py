@@ -17,18 +17,20 @@ class EventRow:
 
 class OracleMemoryStore:
     def add_event(self, evt: TransactionEvent):
+        print("OracleMemoryStore.add_event:", evt.event_id)
         dao.insert_transaction(evt)
         dao.upsert_device_seen(evt.account_id, evt.device_id)
+        print("OracleMemoryStore.add_event: done")
 
     def recent_events(self, account_id: str, window: timedelta) -> List[EventRow]:
         rows: List[Dict[str, Any]] = dao.recent_events(account_id, window)
         out: List[EventRow] = []
         for r in rows:
             out.append(EventRow(
-                timestamp=r.get("TS_UTC"),
+                timestamp=r.get("CREATED_AT"),
                 amount=float(r.get("AMOUNT")) if r.get("AMOUNT") is not None else 0.0,
-                lat=r.get("LATITUDE"),
-                lon=r.get("LONGITUDE"),
+                lat=r.get("GEOLAT"),
+                lon=r.get("GEOLON"),
                 device_id=r.get("DEVICE_ID"),
                 merchant_id=r.get("MERCHANT_ID"),
                 channel=r.get("CHANNEL")

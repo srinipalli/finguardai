@@ -452,6 +452,29 @@ END;
 /
 COMMIT;
 
+CREATE SEQUENCE fg_device_seq
+  START WITH 100
+  INCREMENT BY 1
+  NOCACHE
+  NOCYCLE;
+
+CREATE SEQUENCE fg_decision_seq
+  START WITH 100
+  INCREMENT BY 1
+  NOCACHE
+  NOCYCLE;
+  
+CREATE SEQUENCE fg_alerts_seq
+  START WITH 100
+  INCREMENT BY 1
+  NOCACHE
+  NOCYCLE; 
+
+  
+ ALTER TABLE fg_transactions 
+ADD (DEVICE_ID VARCHAR2(50));
+ 
+
 -- =====================================================================
 -- Indexing suggestions (adjust based on workload)
 -- =====================================================================

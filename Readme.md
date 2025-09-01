@@ -86,9 +86,10 @@ See `finguard/` subpackages for action, decision, memory, perception, utils, and
 
 
 ## LLM integration
-- Optional risk adjustment via LLM (OpenAI) lives in `finguard/llm/service.py`.
-- Enable with `FINGUARD_LLM_ENABLED=true` and set `OPENAI_API_KEY`.
-- Provider can be switched via `FINGUARD_LLM_PROVIDER=openai` (default is `mock`).
+- Optional risk adjustment via LLM lives in `finguard/llm/service.py`.
+- Enable with `FINGUARD_LLM_ENABLED=true` and set the provider API key.
+- Supported providers: `mock`, `openai`, `gemini`.
+- For OpenAI set `OPENAI_API_KEY`. For Google Gemini set `GOOGLE_API_KEY` and `FINGUARD_LLM_PROVIDER=gemini`.
 
 ## MCP-style Tool Server (FastAPI)
 Expose FinGuard operations as simple tools:

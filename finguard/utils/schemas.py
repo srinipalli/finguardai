@@ -5,7 +5,7 @@ from datetime import datetime
 class TransactionEvent(BaseModel):
     event_id: str
     account_id: str
-    user_id: str
+    user_id: Optional[str] = None
     amount: float
     currency: str = Field(default="INR")
     channel: str  # CARD/UPI/IMPS/NEFT/NETBANKING/ATM, etc.
@@ -32,12 +32,14 @@ class DecisionOutcome(BaseModel):
     risk_score: float
     reasons: List[str] = Field(default_factory=list)
     created_at: datetime
+    #workflow_plan: Optional[Dict[str, Any]] = None
 
 class Alert(BaseModel):
-    alert_id: str
+    alert_id: Optional[str] = None
     event_id: str
     severity: str  # LOW | MEDIUM | HIGH | CRITICAL
     title: str
     description: str
-    created_at: datetime
-    tags: List[str] = Field(default_factory=list)
+    created_at: Optional[datetime] = None
+    tags: Optional[List[str]] = None
+    risk_score: Optional[float] = None

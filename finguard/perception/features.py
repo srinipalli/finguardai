@@ -31,7 +31,7 @@ def perceive(evt: TransactionEvent, memory: MemoryStore) -> PerceivedEvent:
     recent = memory.recent_events(evt.account_id, timedelta(seconds=config.VELOCITY_WINDOW_SEC))
     feats["tx_count_last_window"] = len(recent)
     feats["tx_sum_last_window"] = sum(r.amount for r in recent) if recent else 0.0
-
+    print("perceive:", len(recent), feats["tx_sum_last_window"])
     # Geo-velocity (km/min) comparing with last event if coordinates exist
     if recent and evt.lat is not None and evt.lon is not None:
         last = recent[-1]
@@ -43,10 +43,12 @@ def perceive(evt: TransactionEvent, memory: MemoryStore) -> PerceivedEvent:
             feats["geo_velocity_km_per_min"] = 0.0
     else:
         feats["geo_velocity_km_per_min"] = 0.0
+    print("perceive:", len(recent), feats["geo_velocity_km_per_min"])
 
     # New device
+    print("has_seen_device_recently:", evt.account_id, evt.device_id)
     feats["is_new_device"] = not memory.has_seen_device_recently(evt.account_id, evt.device_id)
-
+    print("is_new_device:", feats["is_new_device"])
     # Risk hints
     feats["channel_base_risk"] = CHANNEL_BASE_RISK.get(evt.channel.upper(), 5)
     feats["mcc_risk"] = MCC_RISK.get((evt.mcc or "").strip(), 0)
@@ -57,5 +59,6 @@ def perceive(evt: TransactionEvent, memory: MemoryStore) -> PerceivedEvent:
 
     # Amount normalization (assume currency already normalized)
     feats["amount"] = evt.amount
+    print("amount:", len(recent), feats["geo_velocity_km_per_min"])
 
     return PerceivedEvent(event=evt, features=feats)

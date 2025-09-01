@@ -4,6 +4,8 @@ from datetime import datetime
 from ..utils.schemas import PerceivedEvent, DecisionOutcome
 from ..memory.oracle_store import OracleMemoryStore as MemoryStore
 from ..config import settings as config
+from ..llm.service import llm_adjustment
+from ..llm.planner import plan_workflow
 
 def score_rules(p: PerceivedEvent, memory: MemoryStore) -> Tuple[float, List[str]]:
     f = p.features
@@ -53,25 +55,33 @@ def score_rules(p: PerceivedEvent, memory: MemoryStore) -> Tuple[float, List[str
     # Blacklist
     if memory.is_blacklisted(evt.merchant_id):
         score += 40; reasons.append(f"Blacklisted merchant +40 ({evt.merchant_id})")
-
+    ## TO DO - add more rules here for DeviceId, Phone, Card, IP address block List    
+    print("score_rules:", score, reasons)
     return score, reasons
 
 def decide(p: PerceivedEvent, memory: MemoryStore) -> DecisionOutcome:
     score, reasons = score_rules(p, memory)
     # Optional LLM delta
     delta, rationale = llm_adjustment(p)
+    print("decide: llm_adjustment returned:", delta, rationale)
     if delta:
         score += delta
         reasons.append(f"LLM adjustment +{delta:.1f}: {rationale}")
     # Get LLM tool-workflow plan (S10-style)
+    print("decide: calling plan_workflow")
     plan = plan_workflow(p)
+    print("decide: got plan", plan.get('workflow'),plan.get('expected_action'))
+
     if plan and plan.get('workflow'):
         reasons.append(f"LLM plan expected_action={plan.get('expected_action')} :: steps={len(plan.get('workflow',[]))}")
+    print(" --------------------------------------------------")
+    print("decide: got plan Workflow", plan.get('workflow'))
+    print(" --------------------------------------------------")
 
-    action = "ALLOW"
+    action = plan.get('expected_action') if plan.get('expected_action') else "ALLOW"
     if score >= config.BLOCK_THRESHOLD:
         action = "BLOCK"
-    elif score >= config.CHALLENGE_THRESHOLD:
+    elif score >= config.CHALLENGE_THRESHOLD and action != "BLOCK":
         action = "CHALLENGE"
     return DecisionOutcome(
         decision_id=str(uuid4()),
@@ -79,5 +89,5 @@ def decide(p: PerceivedEvent, memory: MemoryStore) -> DecisionOutcome:
         action=action,
         risk_score=round(score, 2),
         reasons=reasons,
-        created_at=datetime.utcnow(),
+        created_at=datetime.utcnow() 
     )
